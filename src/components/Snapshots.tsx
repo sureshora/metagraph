@@ -130,7 +130,7 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
                     '$1•••$2',
                   )}
                 </td>
-                <td className="pr-6">
+                <td className="pr-6 text-right">
                   <div>
                     <button
                       onClick={() =>
