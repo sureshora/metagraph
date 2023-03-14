@@ -29,6 +29,9 @@ module.exports = {
         'cluster-metrics-card-background': '#D2D2D6',
         'theme-switcher-background-light': 'rgba(0, 0, 0, 0.27)',
         'theme-switcher-background-dark': 'rgba(255, 255, 255, 0.27)',
+        'json-modal-bg': 'rgba(32, 32, 35, 0.99)',
+        'json-modal-buttons-bg': 'rgba(255, 255, 255, 0.12)',
+        'json-modal-slash': 'rgba(255, 255, 255, 0.3)',
       },
       textColor: {
         light: '#000',

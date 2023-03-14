@@ -8,7 +8,6 @@ import logoDark from '@/assets/logo-dark-mode.svg'
 
 const Header = () => {
   const { theme } = useTheme()
-  console.log(theme)
   return (
     <header className="flex pt-42px pb-31px justify-between items-center">
       {theme === 'dark' ? (

@@ -12,3 +12,15 @@ export type SnapshotInfo = {
     }
   }
 }
+
+export type SnapshotInfoWithRawJSON = {
+  rawJSON: any
+  value: {
+    ordinal: number
+    total: number
+    lastSnapshotHash: string
+    info: {
+      balances: WalletBalanceInfo
+    }
+  }
+}

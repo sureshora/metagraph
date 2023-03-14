@@ -33,6 +33,13 @@ export function WalletBalance({
     })
 
     const response: SnapshotInfo = await snapshotsResponse.json()
+    // filter custom wallets
+    response.value.info.balances = Object.fromEntries(
+      Object.entries(response.value.info.balances).filter(
+        ([key]) =>
+          !key.includes('DAGSTARDUSTCOLLECTIVEHZOIPHXZUBFGNXWJETZVSPAPAHMLXS'),
+      ),
+    )
     setSnapshotInfo(response)
   }, [])
 
