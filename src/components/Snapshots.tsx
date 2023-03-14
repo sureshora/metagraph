@@ -104,7 +104,7 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
       <div className="overflow-x-auto max-h-[500px]">
         <table className="mb-6 w-full table-auto text-left border-0">
           <thead
-            className={`border-b border-black/30 top-0 z-1 border-separate shadow ${
+            className={`border-b border-black/30 top-0 z-1 border-separate shadow sticky ${
               isGlobalSnapshot
                 ? 'bg-[#4D515A] dark:bg-[#40454E] text-white'
                 : 'bg-[#B9DD6D]'
