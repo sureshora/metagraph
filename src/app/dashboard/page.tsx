@@ -74,14 +74,14 @@ const ClusterL0GlobalWidget: FC = function () {
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
@@ -132,14 +132,14 @@ const ClusterL0CurrencyWidget: FC = function () {
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
@@ -190,21 +190,21 @@ const ClusterL1CurrencyWidget: FC = function () {
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
             <tr className="tableRow">
               <td className="dataRow">f3264•••cbf11</td>
               <td className="dataRow">172.8.0.2</td>
-              <td className="pb-2">
+              <td className="pb-2 text-right pr-6">
                 <span className="label badgeReady">Ready</span>
               </td>
             </tr>
@@ -244,8 +244,10 @@ const CardL0GlobalLatest: FC = function () {
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-4 pb-8">
-        <div className="font-display text-[54px] leading-none tracking-wide">33</div>
-        <div className="font-label text-xs text-white/60 pt-3">
+        <div className="font-display text-[54px] leading-none tracking-wide pt-1">
+          33
+        </div>
+        <div className="font-label text-xs text-white/60 pt-2">
           Latest Snapshot
         </div>
       </div>
@@ -312,10 +314,10 @@ const CardL0CurrencyLatest: FC = function () {
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-4 pb-8">
-        <div className="font-display text-[54px] leading-none font-medium tracking-wide">
+        <div className="font-display text-[54px] leading-none font-medium tracking-wide pt-1">
           14
         </div>
-        <div className="font-label text-xs text-black/70 pt-3">
+        <div className="font-label text-xs text-black/70 pt-2">
           Latest Snapshot
         </div>
       </div>
@@ -390,7 +392,9 @@ const L0GlobalSnapshots: FC = function () {
           </thead>
           <tbody>
             <tr className="tableRow">
-              <td className="dataRow text-white font-light">32</td>
+              <td className="dataRow text-white font-light">
+                <span className="ordinal">32</span>
+              </td>
               <td className="dataRow text-white font-light">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
@@ -422,7 +426,9 @@ const L0GlobalSnapshots: FC = function () {
               </td>
             </tr>
             <tr className="tableRow">
-              <td className="dataRow text-white font-light">31</td>
+              <td className="dataRow text-white font-light">
+                <span className="ordinal">31</span>
+              </td>
               <td className="dataRow text-white font-light">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
@@ -454,7 +460,9 @@ const L0GlobalSnapshots: FC = function () {
               </td>
             </tr>
             <tr className="tableRow">
-              <td className="dataRow text-white font-light">30</td>
+              <td className="dataRow text-white font-light">
+                <span className="ordinal">30</span>
+              </td>
               <td className="dataRow text-white font-light">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
@@ -530,7 +538,9 @@ const L0CurrencySnapshots: FC = function () {
           </thead>
           <tbody>
             <tr className="tableRow">
-              <td className="dataRow">14</td>
+              <td className="dataRow">
+                <span className="ordinal text-black">14</span>
+              </td>
               <td className="dataRow">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
@@ -562,7 +572,9 @@ const L0CurrencySnapshots: FC = function () {
               </td>
             </tr>
             <tr className="tableRow">
-              <td className="dataRow">13</td>
+              <td className="dataRow">
+                <span className="ordinal text-black">13</span>
+              </td>
               <td className="dataRow">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
@@ -594,7 +606,9 @@ const L0CurrencySnapshots: FC = function () {
               </td>
             </tr>
             <tr className="tableRow">
-              <td className="dataRow">12</td>
+              <td className="dataRow">
+                <span className="ordinal text-black">12</span>
+              </td>
               <td className="dataRow">
                 f3264324c8f8dccbf119cb79a8b6172c84c781d9c9a07c90d1a4e441761a3eef
               </td>
