@@ -2,41 +2,70 @@ type TotalSupplyInfo = {
   total: number
   ordinal: number
 }
-export async function TotalSupply() {
-  const totalSupplyInfoResponse = await fetch(
-    `${process.env.L0_CURRENCY_URL}/currency/total-supply`,
-    {
-      headers: {
-        Accept: 'application/json',
-      },
-      cache: 'no-store',
-      next: {
-        revalidate: 5,
-      },
+
+type TotalSupplyProps = {
+  clusterName: string
+  apiUrl: string
+  isGlobalSnapshot?: boolean
+}
+
+export async function TotalSupply({
+  clusterName,
+  apiUrl,
+  isGlobalSnapshot,
+}: TotalSupplyProps) {
+  const url = isGlobalSnapshot
+    ? `${apiUrl}/dag/total-supply`
+    : `${apiUrl}/currency/total-supply`
+
+  const totalSupplyInfoResponse = await fetch(url, {
+    headers: {
+      Accept: 'application/json',
     },
-  )
+    cache: 'no-store',
+    next: {
+      revalidate: 5,
+    },
+  })
 
   const totalSupplyInfo: TotalSupplyInfo = await totalSupplyInfoResponse.json()
 
   return (
-    <section className="mt-10 flex flex-col items-start px-6 justify-center">
-      <h2 className="text-2xl font-bold">Total Supply Info</h2>
-      <table className="w-full text-sm text-left">
-        <thead className="text-xs uppercase py-4">
-          <tr>
-            <th scope="col" className="py-3 w-64">
-              Total
-            </th>
-            <th scope="col">Ordinal</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="border-b">
-            <td scope="row ">{totalSupplyInfo.total}</td>
-            <td scope="row">{totalSupplyInfo.ordinal}</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <div
+      className={`rounded-lg ${
+        isGlobalSnapshot
+          ? 'bg-[#4D515A] dark:bg-[#40454E] text-white'
+          : 'bg-[#B9DD6D] text-black'
+      }`}
+    >
+      <div className="flex flex-col sm:p-4 xl:p-6">
+        <div className="overflow-x-auto">
+          <div className="inline-block min-w-full align-middle">
+            <div className="overflow-hidden">
+              <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-2">
+                <div>
+                  <h3 className="text-lg font-semibold">{clusterName}</h3>
+                </div>
+                <div className="text-end flex justify-end align-center">
+                  {totalSupplyInfo.ordinal}
+                </div>
+              </div>
+              <div className="grid w-full grid-cols-1 text-center mt-[31px]">
+                <div className="text-[24px]">
+                  {new Intl.NumberFormat('en-US').format(
+                    totalSupplyInfo.total / 1e8,
+                  )}
+                </div>
+                <div className="text-[11px]">
+                  {isGlobalSnapshot
+                    ? 'Total DAG Supply'
+                    : 'Total L0 Token Supply'}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

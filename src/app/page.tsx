@@ -1,7 +1,8 @@
-import { WalletBalance } from '@/components/WalletBalance'
-import { Cluster } from '@/components/Cluster'
-import { Snapshot } from '@/components/Snapshot'
+import { ClusterMetrics } from '@/components/ClusterMetrics'
+import { LatestSnapshot } from '@/components/LatestSnapshot'
+import { Snapshots } from '@/components/Snapshots'
 import { TotalSupply } from '@/components/TotalSupply'
+import { WalletBalance } from '@/components/WalletBalance'
 
 export const metadata = {
   title: 'Dashboard',
@@ -23,44 +24,75 @@ export default async function Home() {
   }
 
   return (
-    <div className="rounded flex-col bg-background-white justify-center content-center w-7/12 min-h-screen">
-      {/* @ts-expect-error Async Server Component */}
-      <Cluster apiUrl={process.env.L0_GLOBAL_URL} clusterName="L0 Global" />
+    <div className="w-full bg-background-light dark:bg-background-dark">
+      <section className="grid grid-cols-3 gap-1">
+        {/* @ts-expect-error Async Server Component */}
+        <ClusterMetrics
+          apiUrl={process.env.L0_GLOBAL_URL}
+          clusterName="L0 Global"
+        />
+        {/* @ts-expect-error Async Server Component */}
+        <ClusterMetrics
+          apiUrl={process.env.L0_CURRENCY_URL}
+          clusterName="L0 Currency"
+        />
+        {/* @ts-expect-error Async Server Component */}
+        <ClusterMetrics
+          apiUrl={process.env.L1_CURRENCY_URL}
+          clusterName="L1 Currency"
+        />
+      </section>
 
-      {/* @ts-expect-error Async Server Component */}
-      <Cluster apiUrl={process.env.L0_CURRENCY_URL} clusterName="L0 Currency" />
+      <section className="grid grid-cols-4 gap-1 mt-4">
+        <LatestSnapshot
+          apiUrl={process.env.L0_GLOBAL_URL}
+          clusterName="L0 Global"
+          isGlobalSnapshot
+        />
+        {/* @ts-expect-error Async Server Component */}
+        <TotalSupply
+          apiUrl={process.env.L0_GLOBAL_URL}
+          clusterName="L0 Global"
+          isGlobalSnapshot
+        />
 
-      {/* @ts-expect-error Async Server Component */}
-      <Cluster apiUrl={process.env.L1_CURRENCY_URL} clusterName="L1 Currency" />
+        <LatestSnapshot
+          apiUrl={process.env.L0_CURRENCY_URL}
+          clusterName="L0 Currency"
+        />
 
-      {/* @ts-expect-error Async Server Component */}
-      <Snapshot
-        apiUrl={process.env.L0_GLOBAL_URL}
-        clusterName="L0 Global"
-        isGlobalSnapshot
-      />
+        {/* @ts-expect-error Async Server Component */}
+        <TotalSupply
+          apiUrl={process.env.L0_CURRENCY_URL}
+          clusterName="L0 Currency"
+        />
+      </section>
 
-      {/* @ts-expect-error Async Server Component */}
-      <Snapshot
-        apiUrl={process.env.L0_CURRENCY_URL}
-        clusterName="L0 Currency"
-      />
+      <section className="grid grid-cols-2 gap-1 mt-4">
+        <Snapshots
+          apiUrl={process.env.L0_GLOBAL_URL}
+          clusterName="L0 Global"
+          isGlobalSnapshot
+        />
 
-      {/* @ts-expect-error Async Server Component */}
-      <TotalSupply />
+        <Snapshots
+          apiUrl={process.env.L0_CURRENCY_URL}
+          clusterName="L0 Currency"
+        />
+      </section>
 
-      {/* @ts-expect-error Async Server Component */}
-      <WalletBalance
-        apiUrl={process.env.L0_GLOBAL_URL}
-        clusterName="L0 Global"
-        isGlobalSnapshot
-      />
+      <section className="grid grid-cols-2 gap-1 mt-4">
+        <WalletBalance
+          apiUrl={process.env.L0_GLOBAL_URL}
+          clusterName="L0 Global"
+          isGlobalSnapshot
+        />
 
-      {/* @ts-expect-error Async Server Component */}
-      <WalletBalance
-        apiUrl={process.env.L0_CURRENCY_URL}
-        clusterName="L0 Currency"
-      />
+        <WalletBalance
+          apiUrl={process.env.L0_CURRENCY_URL}
+          clusterName="L0 Currency"
+        />
+      </section>
     </div>
   )
 }

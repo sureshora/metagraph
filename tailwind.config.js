@@ -16,9 +16,19 @@ module.exports = {
         display: ['var(--font-helveticaDisplay)'], // font-display
         label: ['var(--font-helveticaMicro)'], // font-label
       },
+      spacing: {
+        '31px': '31px',
+        '42px': '42px',
+        '33px': '33px',
+        '117px': '117px',
+      },
       colors: {
-        dark: '#151517', // dark mode background
-        light: '#FFFFFF', // light mode background
+        darken: 'rgba(0, 0, 0, 0.08);',
+        'background-dark': '#151517',
+        'background-light': '#FFFFFF',
+        'cluster-metrics-card-background': '#D2D2D6',
+        'theme-switcher-background-light': 'rgba(0, 0, 0, 0.27)',
+        'theme-switcher-background-dark': 'rgba(255, 255, 255, 0.27)',
       },
       textColor: {
         light: '#000',
