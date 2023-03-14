@@ -15,6 +15,12 @@ const Dashboard: FC = function () {
         <div>
           <CardL0GlobalSupply />
         </div>
+        <div>
+          <CardL0CurrencyLatest />
+        </div>
+        <div>
+          <CardL0CurrencySupply />
+        </div>
       </div>
       <div className="my-2 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-2">
         <L0GlobalSnapshots />
@@ -211,7 +217,7 @@ const ClusterL1CurrencyWidget: FC = function () {
 
 const CardL0GlobalLatest: FC = function () {
   return (
-    <div className="rounded-lg bg-white shadow text-white dark:bg-[#40454E] p-6 h-full">
+    <div className="rounded-lg bg-white text-white dark:bg-[#40454E] p-6 h-full">
       <div className="flex flex-col">
         <div className="flex">
           <div className="inline-block w-full">
@@ -238,8 +244,8 @@ const CardL0GlobalLatest: FC = function () {
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-4 pb-8">
-        <div className="font-display text-[54px] leading-none">33</div>
-        <div className="font-label text-xs text-white/70 pt-3">
+        <div className="font-display text-[54px] leading-none tracking-wide">33</div>
+        <div className="font-label text-xs text-white/60 pt-3">
           Latest Snapshot
         </div>
       </div>
@@ -249,7 +255,7 @@ const CardL0GlobalLatest: FC = function () {
 
 const CardL0GlobalSupply: FC = function () {
   return (
-    <div className="rounded-lg bg-white shadow text-white dark:bg-[#40454E] p-6 h-full">
+    <div className="rounded-lg bg-white text-white dark:bg-[#40454E] p-6 h-full">
       <div className="flex flex-col">
         <div className="flex">
           <div className="inline-block w-full">
@@ -268,8 +274,78 @@ const CardL0GlobalSupply: FC = function () {
         <div className="font-display text-[42px] leading-none">
           6,000,000,000
         </div>
-        <div className="font-label text-xs text-white/70 pt-3">
+        <div className="font-label text-xs text-white/60 pt-3">
           Total DAG Supply
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const CardL0CurrencyLatest: FC = function () {
+  return (
+    <div className="rounded-lg text-black bg-[#C0E473] p-6 h-full">
+      <div className="flex flex-col">
+        <div className="flex">
+          <div className="inline-block w-full">
+            <h3 className="text-lg font-display text-black leading-[1.2rem] mb-[5px]">
+              L0 Currency
+            </h3>
+          </div>
+          <div className="flex">
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="fill-black"
+            >
+              <path
+                d="M7 1.313a5.687 5.687 0 1 0 0 11.374A5.687 5.687 0 0 0 7 1.313Zm3.063 6.125H7A.437.437 0 0 1 6.562 7V3.937a.438.438 0 0 1 .875 0v2.626h2.625a.438.438 0 0 1 0 .875Z"
+                fill="currentColor"
+              />
+            </svg>
+            <span className="ml-1 leading-[.9rem] text-[12px] font-label font-light">
+              2s
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="grid w-full grid-cols-1 text-center py-4 pb-8">
+        <div className="font-display text-[54px] leading-none font-medium tracking-wide">
+          14
+        </div>
+        <div className="font-label text-xs text-black/70 pt-3">
+          Latest Snapshot
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const CardL0CurrencySupply: FC = function () {
+  return (
+    <div className="rounded-lg text-black bg-[#C0E473] p-6 h-full">
+      <div className="flex flex-col">
+        <div className="flex">
+          <div className="inline-block w-full">
+            <h3 className="text-lg font-display text-black leading-[1.2rem] mb-[5px]">
+              L0 Currency
+            </h3>
+          </div>
+          <div className="flex">
+            <span className="ml-1 leading-[.9rem] font-label font-light">
+              14
+            </span>
+          </div>
+        </div>
+      </div>
+      <div className="grid w-full grid-cols-1 text-center py-7 pb-8">
+        <div className="font-display text-[42px] leading-none font-medium">
+          6,000,000,000
+        </div>
+        <div className="font-label text-xs text-black/60 pt-3">
+          Total L0 Token Supply
         </div>
       </div>
     </div>
