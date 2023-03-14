@@ -25,7 +25,7 @@ const Dashboard: FC = function () {
       </div>
       <div className="my-2 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-2">
         <L0GlobalBalances />
-        <L0GlobalBalances />
+        <L0CurrencyBalances />
       </div>
     </div>
   )
@@ -484,6 +484,67 @@ const L0GlobalBalances: FC = function () {
               <td className="dataRow text-white font-light text-right">
                 1,000,000,000
               </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
+const L0CurrencyBalances: FC = function () {
+  return (
+    <div className="rounded-lg text-black bg-[#B9DD6D]">
+      <div className="flex flex-col p-6">
+        <div className="flex">
+          <div className="inline-block w-full">
+            <h3 className="text-2xl font-display text-black leading-[1.2rem] mb-[5px]">
+              Balances
+            </h3>
+            <span className="font-label font-medium uppercase text-xs tracking-tight text-black/50">
+              L0 Currency
+            </span>
+          </div>
+          <div>
+            <svg
+              width="14"
+              height="14"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="2.667" cy="2.667" r="2.667" fill="#000" />
+              <circle cx="11.334" cy="2.667" r="2.667" fill="#000" />
+              <circle cx="11.334" cy="11.334" r="2.667" fill="#000" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="mb-6 w-full table-auto text-left border-0">
+          <thead className="border-b border-black/30">
+            <tr>
+              <th className="headerRow text-black/50">Address</th>
+              <th className="headerRow text-black/50 text-right">Balance</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="tableRow">
+              <td className="dataRow">
+                DAG7QrKeoHbYezJ6YHUCt7PJDixWgxM4vfKz8qVT
+              </td>
+              <td className="dataRow text-right">1,000,000,000</td>
+            </tr>
+            <tr className="tableRow">
+              <td className="dataRow">
+                DAG7QrKeoHbYezJ6YHUCt7PJDixWgxM4vfKz8qVT
+              </td>
+              <td className="dataRow text-right">1,000,000,000</td>
+            </tr>
+            <tr className="tableRow">
+              <td className="dataRow">
+                DAG7QrKeoHbYezJ6YHUCt7PJDixWgxM4vfKz8qVT
+              </td>
+              <td className="dataRow text-right">1,000,000,000</td>
             </tr>
           </tbody>
         </table>
