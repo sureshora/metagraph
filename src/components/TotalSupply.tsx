@@ -30,40 +30,33 @@ export async function TotalSupply({
 
   const totalSupplyInfo: TotalSupplyInfo = await totalSupplyInfoResponse.json()
 
+  const textColor = isGlobalSnapshot ? 'text-white' : 'text-black'
+
   return (
     <div
-      className={`rounded-lg ${
+      className={`rounded-lg p-6 h-full ${
         isGlobalSnapshot
           ? 'bg-[#4D515A] dark:bg-[#40454E] text-white'
           : 'bg-[#B9DD6D] text-black'
-      }`}
+      }}`}
     >
-      <div className="flex flex-col p-6">
-        <div className="overflow-x-auto">
-          <div className="inline-block min-w-full align-middle">
-            <div className="overflow-hidden">
-              <div className="grid w-full grid-cols-2">
-                <div>
-                  <h3 className="text-lg font-semibold">{clusterName}</h3>
-                </div>
-                <div className="text-end flex justify-end align-center">
-                  {totalSupplyInfo.ordinal}
-                </div>
-              </div>
-              <div className="grid w-full grid-cols-1 text-center mt-[31px]">
-                <div className="text-[24px]">
-                  {new Intl.NumberFormat('en-US').format(
-                    totalSupplyInfo.total / 1e8,
-                  )}
-                </div>
-                <div className="text-[11px]">
-                  {isGlobalSnapshot
-                    ? 'Total DAG Supply'
-                    : 'Total L0 Token Supply'}
-                </div>
-              </div>
-            </div>
+      <div className="flex flex-col">
+        <div className="flex">
+          <div className="inline-block w-full">
+            <h3
+              className={`text-lg font-display ${textColor} leading-[1.2rem] mb-[5px]`}
+            >
+              {clusterName}
+            </h3>
           </div>
+        </div>
+      </div>
+      <div className="grid w-full grid-cols-1 text-center py-7 pb-8">
+        <div className={`font-display text-[42px] leading-none ${textColor}`}>
+          {new Intl.NumberFormat('en-US').format(totalSupplyInfo.total / 1e8)}
+        </div>
+        <div className={`font-label text-xs ${textColor}/60 pt-3`}>
+          {isGlobalSnapshot ? 'Total DAG Supply' : 'Total L0 Token Supply'}
         </div>
       </div>
     </div>
