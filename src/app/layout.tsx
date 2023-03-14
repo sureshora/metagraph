@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="en"
       className={`${ibm.variable} ${helveticaDisplay.variable} ${helveticaMicro.variable}`}
     >
-      <body className="pl-117px pr-33px bg-background-light dark:bg-background-dark">
+      <body className="lg:pl-117px lg:pr-33px pl-[10px] pr-[10px] bg-background-light dark:bg-background-dark">
         <NextThemeProvider>
           <Header />
           <div className="flex content-center justify-center items-center">

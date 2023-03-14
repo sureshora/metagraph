@@ -25,7 +25,7 @@ export default async function Home() {
 
   return (
     <div className="w-full bg-background-light dark:bg-background-dark">
-      <section className="grid grid-cols-3 gap-1">
+      <section className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:grid-gap-1">
         {/* @ts-expect-error Async Server Component */}
         <ClusterMetrics
           apiUrl={process.env.L0_GLOBAL_URL}
@@ -43,7 +43,7 @@ export default async function Home() {
         />
       </section>
 
-      <section className="grid grid-cols-4 gap-1 mt-4">
+      <section className="grid grid-cols-1 gap-5 mt-4 xl:grid-cols-4 xl:grid-gap-1 sm:grid-cols-2">
         <LatestSnapshot
           apiUrl={process.env.L0_GLOBAL_URL}
           clusterName="L0 Global"
@@ -68,20 +68,13 @@ export default async function Home() {
         />
       </section>
 
-      <section className="grid grid-cols-2 gap-1 mt-4">
-        <Snapshots
-          apiUrl={process.env.L0_GLOBAL_URL}
-          clusterName="L0 Global"
-          isGlobalSnapshot
-        />
+      <section className="grid grid-cols-1 gap-5 mt-4 xl:grid-cols-2 xl:grid-gap-1">
+        <Snapshots clusterName="L0 Global" isGlobalSnapshot />
 
-        <Snapshots
-          apiUrl={process.env.L0_CURRENCY_URL}
-          clusterName="L0 Currency"
-        />
+        <Snapshots clusterName="L0 Currency" />
       </section>
 
-      <section className="grid grid-cols-2 gap-1 mt-4">
+      <section className="grid grid-cols-1 gap-5 mt-4 xl:grid-cols-2 xl:grid-gap-1 mb-[50px]">
         <WalletBalance
           apiUrl={process.env.L0_GLOBAL_URL}
           clusterName="L0 Global"

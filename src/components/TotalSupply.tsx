@@ -38,11 +38,11 @@ export async function TotalSupply({
           : 'bg-[#B9DD6D] text-black'
       }`}
     >
-      <div className="flex flex-col sm:p-4 xl:p-6">
+      <div className="flex flex-col p-6">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
             <div className="overflow-hidden">
-              <div className="grid w-full grid-cols-1 gap-6 xl:grid-cols-2">
+              <div className="grid w-full grid-cols-2">
                 <div>
                   <h3 className="text-lg font-semibold">{clusterName}</h3>
                 </div>

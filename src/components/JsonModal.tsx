@@ -47,8 +47,8 @@ export function JsonModal({
       {isOpened && (
         <div
           ref={wrapperRef}
-          className={`absolute bg-json-modal-bg w-[650px] h-[580px] rounded-[12px] text-white ${
-            isGlobalSnapshot ? 'left-2/4' : 'right-2/4'
+          className={`absolute bg-json-modal-bg w-[100%] xl:w-[650px] h-[580px] rounded-[12px] text-white ${
+            isGlobalSnapshot ? 'xl:left-2/4' : 'xl:right-2/4'
           } z-10`}
         >
           <div className="flex justify-between align-center bg-[#1F1F21] border-b border-[#1F1F21]">
