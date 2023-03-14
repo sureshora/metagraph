@@ -24,12 +24,15 @@
   }
   .headerRow {
     font-size: 11px;
-    @apply font-label px-6 py-2 font-medium text-black/40 tracking-tighter;
+    @apply font-label px-6 py-2 font-normal text-black/40 tracking-tight;
   }
   .dataRow {
     @apply font-mono px-6 py-3 font-normal text-black/70 text-sm;
   }
   .tableRow {
     @apply border-b border-black/10 hover:bg-black/5;
+  }
+  .ordinal {
+    @apply bg-black/10 rounded-full px-3 py-1 font-normal;
   }
 }
