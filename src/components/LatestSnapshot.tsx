@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SnapshotInfo } from '@/types'
 
 type LatestSnapshotProps = {
@@ -20,6 +20,9 @@ export function LatestSnapshot({
   const [snapshotInfo, setSnapshotInfo] = useState({
     value: {},
   } as SnapshotInfo)
+  const [lastSnapshotInfo, setLastSnapshotInfo] = useState({
+    value: {},
+  } as SnapshotInfo)
 
   const storeSnapshot = (response: SnapshotInfo) => {
     const storedHashes = localStorage.getItem(clusterName)
@@ -28,7 +31,18 @@ export function LatestSnapshot({
     } else {
       const storedHashesParsed: SnapshotInfo[] = JSON.parse(storedHashes)
 
-      if (storedHashesParsed.length >= 20) {
+      const shouldClearLocalStorage = storedHashesParsed.some(
+        (storedSnapshot) =>
+          storedSnapshot.value.ordinal > response.value.ordinal,
+      )
+
+      if (shouldClearLocalStorage) {
+        localStorage.removeItem(clusterName)
+        localStorage.setItem(`${clusterName}`, JSON.stringify([response]))
+        return
+      }
+
+      if (storedHashesParsed.length >= 100) {
         storedHashesParsed.shift()
       }
 
@@ -45,7 +59,24 @@ export function LatestSnapshot({
     }
   }
 
-  const fetchData = useCallback(async () => {
+  const checkLastSnapshot = (response: SnapshotInfo) => {
+    if (Object.keys(response.value).length === 0) {
+      setSeconds(0)
+      setLastSnapshotInfo(response)
+      return
+    }
+    if (
+      lastSnapshotInfo &&
+      lastSnapshotInfo.value.ordinal === response.value.ordinal
+    ) {
+      setSeconds(seconds + 1)
+    } else {
+      setLastSnapshotInfo(response)
+      setSeconds(0)
+    }
+  }
+
+  const fetchData = async () => {
     const url = isGlobalSnapshot
       ? `${apiUrl}/global-snapshots/latest`
       : `${apiUrl}/snapshots/latest`
@@ -64,8 +95,8 @@ export function LatestSnapshot({
     if (typeof window !== 'undefined') {
       storeSnapshot(response)
     }
-    setSeconds(0)
-  }, [])
+    checkLastSnapshot(response)
+  }
 
   useEffect(() => {
     fetchData()
@@ -73,7 +104,7 @@ export function LatestSnapshot({
 
   useEffect(() => {
     setTimeout(() => {
-      if (seconds < REFRESH_TIME) {
+      if (seconds === 0 || seconds % REFRESH_TIME !== 0) {
         setSeconds(seconds + 1)
       } else {
         fetchData()

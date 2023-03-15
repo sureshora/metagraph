@@ -1,6 +1,6 @@
 'use client'
 import { SnapshotInfo } from '@/types'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 type WalletBalanceProps = {
   clusterName: string
@@ -16,36 +16,46 @@ export function WalletBalance({
   const [snapshotInfo, setSnapshotInfo] = useState({
     value: { info: {} },
   } as SnapshotInfo)
+  const [seconds, setSeconds] = useState(0)
 
-  const fetchData = useCallback(async () => {
-    const url = isGlobalSnapshot
-      ? `${apiUrl}/global-snapshots/latest`
-      : `${apiUrl}/snapshots/latest`
+  const refreshBalances = () => {
+    if (typeof window === 'undefined') {
+      return
+    }
 
-    const snapshotsResponse = await fetch(url, {
-      headers: {
-        Accept: 'application/json',
-      },
-      cache: 'no-store',
-      next: {
-        revalidate: 5,
-      },
-    })
+    const storedSnapshots = localStorage.getItem(clusterName)
+    if (storedSnapshots && storedSnapshots !== '{}') {
+      const rawStoredSnapshots: SnapshotInfo[] = JSON.parse(storedSnapshots)
+      const storedSnapshotsParsed = rawStoredSnapshots.sort(
+        (a: SnapshotInfo, b: SnapshotInfo) => {
+          return b.value.ordinal < a.value.ordinal ? -1 : 1
+        },
+      )
+      const snapshotInfoToBeUsed = storedSnapshotsParsed[0]
 
-    const response: SnapshotInfo = await snapshotsResponse.json()
-    // filter custom wallets
-    response.value.info.balances = Object.fromEntries(
-      Object.entries(response.value.info.balances).filter(
-        ([key]) =>
-          !key.includes('DAGSTARDUSTCOLLECTIVEHZOIPHXZUBFGNXWJETZVSPAPAHMLXS'),
-      ),
-    )
-    setSnapshotInfo(response)
+      snapshotInfoToBeUsed.value.info.balances = Object.fromEntries(
+        Object.entries(snapshotInfoToBeUsed.value.info.balances).filter(
+          ([key]) =>
+            !key.includes(
+              'DAGSTARDUSTCOLLECTIVEHZOIPHXZUBFGNXWJETZVSPAPAHMLXS',
+            ),
+        ),
+      )
+      setSnapshotInfo(snapshotInfoToBeUsed)
+    }
+
+    setSeconds(seconds > 10 ? 0 : seconds + 1)
+  }
+
+  useEffect(() => {
+    refreshBalances()
   }, [])
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    setTimeout(() => {
+      refreshBalances()
+    }, 1000)
+  }, [seconds])
 
   const copyToClipboard = (content: string) => {
     if (typeof navigator !== 'undefined') {
@@ -141,7 +151,9 @@ export function WalletBalance({
                     </button>
                   </td>
                   <td className={`dataRow  ${textColor} font-light text-right`}>
-                    {snapshotInfo.value.info.balances[key] / 1e8}
+                    {new Intl.NumberFormat('en-US', {
+                      maximumSignificantDigits: 10,
+                    }).format(snapshotInfo.value.info.balances[key] / 1e8)}
                   </td>
                 </tr>
               ))}

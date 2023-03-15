@@ -14,26 +14,31 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
   const [modalIsOpened, setModalIsOpened] = useState(false)
   const [jsonModalContent, setJsonModalContent] = useState<string | null>(null)
   const [jsonModalOrdinal, setJsonModalOrdinal] = useState<number>(0)
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedSnapshots = localStorage.getItem(clusterName)
-      if (storedSnapshots && storedSnapshots !== '{}') {
-        const rawStoredSnapshots = JSON.parse(storedSnapshots)
-        const storedSnapshotsParsed = rawStoredSnapshots.map(
-          (snapshot: any) => {
-            const currentSnapshot: SnapshotInfoWithRawJSON = snapshot
-            snapshot.value.stateChannelSnapshots = ':<Stream>'
-            currentSnapshot.rawJSON = snapshot
-            return currentSnapshot
-          },
-        )
-        setSnaphots(storedSnapshotsParsed)
-      }
-    }
-  }, [])
-
+  const [seconds, setSeconds] = useState(0)
   const textColor = isGlobalSnapshot ? 'text-white' : 'text-black'
+
+  const refreshSnapshotsList = () => {
+    if (typeof window === 'undefined') {
+      return
+    }
+
+    const storedSnapshots = localStorage.getItem(clusterName)
+    if (storedSnapshots && storedSnapshots !== '{}') {
+      const rawStoredSnapshots = JSON.parse(storedSnapshots)
+      const storedSnapshotsParsed = rawStoredSnapshots
+        .map((snapshot: any) => {
+          const currentSnapshot: SnapshotInfoWithRawJSON = snapshot
+          snapshot.value.stateChannelSnapshots = ':<Stream>'
+          currentSnapshot.rawJSON = snapshot
+          return currentSnapshot
+        })
+        .sort((a: SnapshotInfoWithRawJSON, b: SnapshotInfoWithRawJSON) => {
+          return b.value.ordinal < a.value.ordinal ? -1 : 1
+        })
+      setSnaphots(storedSnapshotsParsed)
+    }
+    setSeconds(seconds > 10 ? 0 : seconds + 1)
+  }
 
   const toogleOpenModal = useCallback(
     (content: string, ordinal: number) => {
@@ -63,6 +68,16 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
       />
     )
   }
+
+  useEffect(() => {
+    refreshSnapshotsList()
+  }, [])
+
+  useEffect(() => {
+    setTimeout(() => {
+      refreshSnapshotsList()
+    }, 1000)
+  }, [seconds])
 
   return (
     <div
