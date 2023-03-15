@@ -11,6 +11,16 @@ type ClusterMetricsCardProps = {
 
 const nodeStates = {
   READY: 'READY',
+  INITIAL: 'INITIAL',
+  READY_TO_JOIN: 'READY TO JOIN',
+  LOADING_GENESIS: 'LOADING GENESIS',
+  GENESIS_READY: 'GENESIS READY',
+  STARTING_SESSION: 'STARTING_SESSION',
+  SESSION_STARTED: 'SESSION STARTED',
+  WAITING_FOR_DOWNLOAD: 'WAITING FOR DOWNLOAD',
+  DOWNLOAD_IN_PROGRESS: 'DOWNLOAD IN PROGRESS',
+  LEAVING: 'LEAVING',
+  OFFLINE: 'OFFLINE',
 }
 
 export function ClusterMetricsCard({
@@ -58,10 +68,35 @@ export function ClusterMetricsCard({
                 <td className="dataRow">{content.nodeId}</td>
                 <td className="dataRow">{content.ipAddress}</td>
                 <td className="pb-2">
-                  {content.state.toUpperCase() === nodeStates.READY ? (
+                  {[
+                    nodeStates.READY,
+                    nodeStates.INITIAL,
+                    nodeStates.READY_TO_JOIN,
+                  ].includes(content.state.toUpperCase()) ? (
                     <span className="label badgeReady">{content.state}</span>
+                  ) : [
+                      nodeStates.LOADING_GENESIS,
+                      nodeStates.GENESIS_READY,
+                    ].includes(content.state.toUpperCase()) ? (
+                    <span className="label badgeLoadingGenesis">
+                      {content.state}
+                    </span>
+                  ) : [
+                      nodeStates.STARTING_SESSION,
+                      nodeStates.SESSION_STARTED,
+                    ].includes(content.state.toUpperCase()) ? (
+                    <span className="label badgeStartingSession">
+                      {content.state}
+                    </span>
+                  ) : [
+                      nodeStates.WAITING_FOR_DOWNLOAD,
+                      nodeStates.DOWNLOAD_IN_PROGRESS,
+                    ].includes(content.state.toUpperCase()) ? (
+                    <span className="label badgeWaitingForDownload">
+                      {content.state}
+                    </span>
                   ) : (
-                    <span className="label">{content.state}</span>
+                    <span className="label badgeLeaving">{content.state}</span>
                   )}
                 </td>
               </tr>
