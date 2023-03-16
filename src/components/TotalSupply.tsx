@@ -24,6 +24,28 @@ export function TotalSupply({
   const [totalSupplyInfo, setTotalSupplyInfo] = useState({} as TotalSupplyInfo)
   const [seconds, setSeconds] = useState(0)
 
+  const numberFormatter = (num: number) => {
+    const lookup = [
+      { value: 1, symbol: '' },
+      { value: 1e3, symbol: 'K' },
+      { value: 1e6, symbol: 'M' },
+      { value: 1e9, symbol: 'G' },
+      { value: 1e12, symbol: 'T' },
+      { value: 1e15, symbol: 'P' },
+      { value: 1e18, symbol: 'E' },
+    ]
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
+    const item = lookup
+      .slice()
+      .reverse()
+      .find(function (item) {
+        return num >= item.value
+      })
+    return item
+      ? (num / item.value).toFixed(2).replace(rx, '$1') + item.symbol
+      : '0'
+  }
+
   const fetchTotalSupply = async () => {
     const url = isGlobalSnapshot
       ? `${apiUrl}/dag/total-supply`
@@ -73,19 +95,26 @@ export function TotalSupply({
             <h3
               className={`text-lg font-display ${textColor} leading-[1.2rem] mb-[5px]`}
             >
-              {clusterName}
+              Total Supply
             </h3>
+          </div>
+          <div className="flex w-[200px]">
+            <span
+              className={`ml-1 w-full leading-[.9rem] font-label font-light ${textColor} text-right`}
+            >
+              {isGlobalSnapshot ? 'DAG' : 'L0 Currency'}
+            </span>
           </div>
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-7 pb-8">
-        <div className={`font-display text-[30px] leading-none ${textColor}`}>
+        <div className={`font-display text-[58px] leading-none ${textColor}`}>
+          {numberFormatter(totalSupplyInfo.total / 1e8)}
+        </div>
+        <div className={`font-label text-xs ${textColor}/60 pt-3`}>
           {new Intl.NumberFormat('en-US', {
             maximumSignificantDigits: 21,
           }).format(totalSupplyInfo.total / 1e8)}
-        </div>
-        <div className={`font-label text-xs ${textColor}/60 pt-3`}>
-          {isGlobalSnapshot ? 'Total DAG Supply' : 'Total L0 Token Supply'}
         </div>
       </div>
     </div>
