@@ -26,17 +26,14 @@ export default async function Home() {
   return (
     <div className="w-full h-full px-6 pb-4 bg-background-light dark:bg-background-dark">
       <section className="mt-6 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-        {/* @ts-expect-error Async Server Component */}
         <ClusterMetrics
           apiUrl={process.env.L0_GLOBAL_URL}
           clusterName="L0 Global"
         />
-        {/* @ts-expect-error Async Server Component */}
         <ClusterMetrics
           apiUrl={process.env.L0_CURRENCY_URL}
           clusterName="L0 Currency"
         />
-        {/* @ts-expect-error Async Server Component */}
         <ClusterMetrics
           apiUrl={process.env.L1_CURRENCY_URL}
           clusterName="L1 Currency"
@@ -49,7 +46,6 @@ export default async function Home() {
           clusterName="L0 Global"
           isGlobalSnapshot
         />
-        {/* @ts-expect-error Async Server Component */}
         <TotalSupply
           apiUrl={process.env.L0_GLOBAL_URL}
           clusterName="L0 Global"
@@ -60,8 +56,6 @@ export default async function Home() {
           apiUrl={process.env.L0_CURRENCY_URL}
           clusterName="L0 Currency"
         />
-
-        {/* @ts-expect-error Async Server Component */}
         <TotalSupply
           apiUrl={process.env.L0_CURRENCY_URL}
           clusterName="L0 Currency"
