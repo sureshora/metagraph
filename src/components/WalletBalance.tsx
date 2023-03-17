@@ -105,10 +105,8 @@ export function WalletBalance({
         <table className="mb-6 w-full table-auto text-left border-0">
           <thead className="border-b border-black/30">
             <tr>
-              <th className={`headerRow  ${textColor}/50`}>Address</th>
-              <th className={`headerRow  ${textColor}/50 text-right`}>
-                Balance
-              </th>
+              <th className={`headerRow  ${textColor}`}>Address</th>
+              <th className={`headerRow  ${textColor} text-right`}>Balance</th>
             </tr>
           </thead>
           <tbody>

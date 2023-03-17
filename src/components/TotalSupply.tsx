@@ -111,7 +111,7 @@ export function TotalSupply({
         <div className={`font-display text-[58px] leading-none ${textColor}`}>
           {numberFormatter(totalSupplyInfo.total / 1e8)}
         </div>
-        <div className={`font-label text-xs ${textColor}/60 pt-3`}>
+        <div className={`font-label text-xs ${textColor} pt-3`}>
           {new Intl.NumberFormat('en-US', {
             maximumSignificantDigits: 21,
           }).format(totalSupplyInfo.total / 1e8)}

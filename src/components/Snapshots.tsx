@@ -17,6 +17,25 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
   const [seconds, setSeconds] = useState(0)
   const textColor = isGlobalSnapshot ? 'text-white' : 'text-black'
 
+  const formatJSONContent = (snapshot: any) => {
+    if (!snapshot.value.stateChannelSnapshots) {
+      return snapshot
+    }
+
+    snapshot.value.stateChannelSnapshots = Object.keys(
+      snapshot.value.stateChannelSnapshots,
+    ).map((key) => {
+      snapshot.value.stateChannelSnapshots[key] =
+        snapshot.value.stateChannelSnapshots[key].map((info: any) => {
+          info.value.content = '<Buffer>'
+          return info
+        })
+      return snapshot.value.stateChannelSnapshots[key]
+    })
+
+    return snapshot
+  }
+
   const refreshSnapshotsList = () => {
     if (typeof window === 'undefined') {
       return
@@ -28,7 +47,7 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
       const storedSnapshotsParsed = rawStoredSnapshots
         .map((snapshot: any) => {
           const currentSnapshot: SnapshotInfoWithRawJSON = snapshot
-          snapshot.value.stateChannelSnapshots = ':<Stream>'
+          snapshot = formatJSONContent(snapshot)
           currentSnapshot.rawJSON = snapshot
           return currentSnapshot
         })
@@ -126,9 +145,9 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
             }`}
           >
             <tr>
-              <th className={`headerRow ${textColor}/50`}>Ordinal</th>
-              <th className={`headerRow ${textColor}/50`}>Snapshot Hash</th>
-              <th className={`headerRow ${textColor}/50 text-right`}>JSON</th>
+              <th className={`headerRow ${textColor}`}>Ordinal</th>
+              <th className={`headerRow ${textColor}`}>Snapshot Hash</th>
+              <th className={`headerRow ${textColor} text-right`}>JSON</th>
             </tr>
           </thead>
           <tbody>

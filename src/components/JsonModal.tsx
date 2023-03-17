@@ -51,7 +51,7 @@ export function JsonModal({
             isGlobalSnapshot ? 'xl:left-2/4' : 'xl:right-2/4'
           } z-10`}
         >
-          <div className="flex justify-between align-center bg-[#1F1F21] border-b border-[#1F1F21]">
+          <div className="flex justify-between align-center bg-[#1F1F21] border-b border-[#1F1F21] rounded-[12px]">
             <span className="font-label font-normal pl-[30px] pt-[24px] pb-[23px]">
               {clusterName} <span className="text-json-modal-slash">/</span>{' '}
               Snapshots <span className="text-json-modal-slash">/</span> Ordinal{' '}
