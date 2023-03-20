@@ -22,16 +22,13 @@ export function Snapshots({ clusterName, isGlobalSnapshot }: SnapshotsProps) {
       return snapshot
     }
 
-    snapshot.value.stateChannelSnapshots = Object.keys(
-      snapshot.value.stateChannelSnapshots,
-    ).map((key) => {
+    for (const key of Object.keys(snapshot.value.stateChannelSnapshots)) {
       snapshot.value.stateChannelSnapshots[key] =
         snapshot.value.stateChannelSnapshots[key].map((info: any) => {
           info.value.content = '<Buffer>'
           return info
         })
-      return snapshot.value.stateChannelSnapshots[key]
-    })
+    }
 
     return snapshot
   }
