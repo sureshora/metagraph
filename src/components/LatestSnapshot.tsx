@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { SnapshotInfo } from '@/types'
+import { SnapshotInfo, TransactionsInfo } from '@/types'
+import { Loading } from './Loading'
 
 type LatestSnapshotProps = {
   clusterName: string
@@ -23,6 +24,63 @@ export function LatestSnapshot({
   const [lastSnapshotInfo, setLastSnapshotInfo] = useState({
     value: {},
   } as SnapshotInfo)
+
+  const fillSnapshotTransactions = (snapshot: SnapshotInfo) => {
+    const blocks = snapshot.value.blocks
+
+    if (!blocks || blocks.length === 0) {
+      return
+    }
+    const allTransactionsInfos: TransactionsInfo[] = []
+    for (const currentBlock of blocks) {
+      if (
+        !currentBlock ||
+        Object.keys(currentBlock).length === 0 ||
+        !currentBlock.block.value ||
+        Object.keys(currentBlock.block.value).length === 0
+      ) {
+        continue
+      }
+
+      const transactions = currentBlock.block.value.transactions
+      if (!transactions || transactions.length === 0) {
+        continue
+      }
+
+      const transactionInfos = transactions.map(
+        (transaction): TransactionsInfo => {
+          return {
+            source: transaction.value.source,
+            destination: transaction.value.destination,
+            fee: transaction.value.fee,
+            amount: transaction.value.amount,
+            ordinal: snapshot.value.ordinal,
+          }
+        },
+      )
+
+      allTransactionsInfos.push(...transactionInfos)
+    }
+
+    const transactionsKey = `${clusterName}_transactions`
+    const storedTransactions = localStorage.getItem(transactionsKey)
+    if (!storedTransactions) {
+      localStorage.setItem(
+        transactionsKey,
+        JSON.stringify(allTransactionsInfos),
+      )
+      return
+    }
+
+    const storedTransactionsParsed: TransactionsInfo[] =
+      JSON.parse(storedTransactions)
+
+    storedTransactionsParsed.push(...allTransactionsInfos)
+    localStorage.setItem(
+      transactionsKey,
+      JSON.stringify(storedTransactionsParsed),
+    )
+  }
 
   const fetchLatestSnapshot = async () => {
     const url = isGlobalSnapshot
@@ -63,6 +121,8 @@ export function LatestSnapshot({
       },
     })
     const response: SnapshotInfo = await snapshotsResponse.json()
+
+    fillSnapshotTransactions(response)
 
     return response
   }
@@ -159,10 +219,11 @@ export function LatestSnapshot({
   }
 
   useEffect(() => {
-    fetchLatestSnapshot()
-  }, [])
+    if (seconds === 0) {
+      setSeconds(seconds + 1)
+      return
+    }
 
-  useEffect(() => {
     setTimeout(() => {
       if (seconds === 0 || seconds % REFRESH_TIME !== 0) {
         setSeconds(seconds + 1)
@@ -210,9 +271,13 @@ export function LatestSnapshot({
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-4 pb-8">
-        <div className="font-display text-[54px] leading-none tracking-wide pt-1">
-          {snapshotInfo.value.ordinal}
-        </div>
+        {snapshotInfo.value.ordinal ? (
+          <div className="font-display text-[54px] leading-none tracking-wide pt-1">
+            {snapshotInfo.value.ordinal}
+          </div>
+        ) : (
+          <Loading textColor={textColor} />
+        )}
         <div className={`font-label text-xs ${textColor}/60 pt-2`}>
           Latest Snapshot
         </div>

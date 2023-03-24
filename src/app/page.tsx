@@ -2,6 +2,7 @@ import { ClusterMetrics } from '@/components/ClusterMetrics'
 import { LatestSnapshot } from '@/components/LatestSnapshot'
 import { Snapshots } from '@/components/Snapshots'
 import { TotalSupply } from '@/components/TotalSupply'
+import { Transactions } from '@/components/Transactions'
 import { WalletBalance } from '@/components/WalletBalance'
 
 export const metadata = {
@@ -83,6 +84,10 @@ export default async function Home() {
           apiUrl={process.env.L0_CURRENCY_URL}
           clusterName={CURRENCY_L0_CLUSTER_NAME}
         />
+      </section>
+
+      <section className="my-2 grid w-full grid-cols-1">
+        <Transactions clusterName={CURRENCY_L0_CLUSTER_NAME} />
       </section>
     </div>
   )

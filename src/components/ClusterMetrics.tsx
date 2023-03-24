@@ -55,10 +55,11 @@ export function ClusterMetrics({ clusterName, apiUrl }: ClusterInfoProps) {
   }
 
   useEffect(() => {
-    fetchClusterInfo()
-  }, [])
+    if (seconds === 0) {
+      setSeconds(seconds + 1)
+      return
+    }
 
-  useEffect(() => {
     setTimeout(() => {
       if (seconds === 0 || seconds % REFRESH_TIME !== 0) {
         setSeconds(seconds + 1)

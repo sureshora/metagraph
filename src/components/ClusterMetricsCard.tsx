@@ -1,3 +1,5 @@
+import { Loading } from './Loading'
+
 type NodeContentProps = {
   nodeId: string
   ipAddress: string
@@ -54,55 +56,63 @@ export function ClusterMetricsCard({
         </div>
       </div>
       <div className="overflow-x-auto max-h-[500px]">
-        <table className="mb-6 w-full table-auto text-left border-0">
-          <thead className="border-b border-black/30 sticky top-0 z-10 border-separate bg-[#E0E0E4] shadow dark:bg-[#D2D2D6]">
-            <tr>
-              <th className="headerRow">Node ID</th>
-              <th className="headerRow">IP Address</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody className="overflow-y-auto">
-            {nodesContent.map((content) => (
-              <tr key={content.ipAddress} className="tableRow">
-                <td className="dataRow">{content.nodeId}</td>
-                <td className="dataRow">{content.ipAddress}</td>
-                <td className="pb-2">
-                  {[
-                    nodeStates.READY,
-                    nodeStates.INITIAL,
-                    nodeStates.READY_TO_JOIN,
-                  ].includes(content.state.toUpperCase()) ? (
-                    <span className="label badgeReady">{content.state}</span>
-                  ) : [
-                      nodeStates.LOADING_GENESIS,
-                      nodeStates.GENESIS_READY,
-                    ].includes(content.state.toUpperCase()) ? (
-                    <span className="label badgeLoadingGenesis">
-                      {content.state}
-                    </span>
-                  ) : [
-                      nodeStates.STARTING_SESSION,
-                      nodeStates.SESSION_STARTED,
-                    ].includes(content.state.toUpperCase()) ? (
-                    <span className="label badgeStartingSession">
-                      {content.state}
-                    </span>
-                  ) : [
-                      nodeStates.WAITING_FOR_DOWNLOAD,
-                      nodeStates.DOWNLOAD_IN_PROGRESS,
-                    ].includes(content.state.toUpperCase()) ? (
-                    <span className="label badgeWaitingForDownload">
-                      {content.state}
-                    </span>
-                  ) : (
-                    <span className="label badgeLeaving">{content.state}</span>
-                  )}
-                </td>
+        {nodesContent && nodesContent.length > 0 ? (
+          <table className="mb-6 w-full table-auto text-left border-0">
+            <thead className="border-b border-black/30 sticky top-0 z-10 border-separate bg-[#E0E0E4] shadow dark:bg-[#D2D2D6]">
+              <tr>
+                <th className="headerRow">Node ID</th>
+                <th className="headerRow">IP Address</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="overflow-y-auto">
+              {nodesContent.map((content) => (
+                <tr key={content.ipAddress} className="tableRow">
+                  <td className="dataRow">{content.nodeId}</td>
+                  <td className="dataRow">{content.ipAddress}</td>
+                  <td className="pb-2">
+                    {[
+                      nodeStates.READY,
+                      nodeStates.INITIAL,
+                      nodeStates.READY_TO_JOIN,
+                    ].includes(content.state.toUpperCase()) ? (
+                      <span className="label badgeReady">{content.state}</span>
+                    ) : [
+                        nodeStates.LOADING_GENESIS,
+                        nodeStates.GENESIS_READY,
+                      ].includes(content.state.toUpperCase()) ? (
+                      <span className="label badgeLoadingGenesis">
+                        {content.state}
+                      </span>
+                    ) : [
+                        nodeStates.STARTING_SESSION,
+                        nodeStates.SESSION_STARTED,
+                      ].includes(content.state.toUpperCase()) ? (
+                      <span className="label badgeStartingSession">
+                        {content.state}
+                      </span>
+                    ) : [
+                        nodeStates.WAITING_FOR_DOWNLOAD,
+                        nodeStates.DOWNLOAD_IN_PROGRESS,
+                      ].includes(content.state.toUpperCase()) ? (
+                      <span className="label badgeWaitingForDownload">
+                        {content.state}
+                      </span>
+                    ) : (
+                      <span className="label badgeLeaving">
+                        {content.state}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="my-[20px] ml-[20px]">
+            <Loading textColor="" />
+          </div>
+        )}
       </div>
     </div>
   )

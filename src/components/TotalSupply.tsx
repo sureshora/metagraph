@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Loading } from './Loading'
 
 type TotalSupplyInfo = {
   total: number
@@ -66,10 +67,11 @@ export function TotalSupply({
   }
 
   useEffect(() => {
-    fetchTotalSupply()
-  }, [])
+    if (seconds === 0) {
+      setSeconds(seconds + 1)
+      return
+    }
 
-  useEffect(() => {
     setTimeout(() => {
       if (seconds === 0 || seconds % REFRESH_TIME !== 0) {
         setSeconds(seconds + 1)
@@ -108,14 +110,24 @@ export function TotalSupply({
         </div>
       </div>
       <div className="grid w-full grid-cols-1 text-center py-7 pb-8">
-        <div className={`font-display text-[58px] leading-none ${textColor}`}>
-          {numberFormatter(totalSupplyInfo.total / 1e8)}
-        </div>
-        <div className={`font-label text-xs ${textColor} pt-3`}>
-          {new Intl.NumberFormat('en-US', {
-            maximumSignificantDigits: 21,
-          }).format(totalSupplyInfo.total / 1e8)}
-        </div>
+        {totalSupplyInfo.total ? (
+          <>
+            <div
+              className={`font-display text-[58px] leading-none ${textColor}`}
+            >
+              {numberFormatter(totalSupplyInfo.total / 1e8)}
+            </div>
+            <div className={`font-label text-xs ${textColor} pt-3`}>
+              {new Intl.NumberFormat('en-US', {
+                maximumSignificantDigits: 21,
+              }).format(totalSupplyInfo.total / 1e8)}
+            </div>
+          </>
+        ) : (
+          <>
+            <Loading textColor={textColor} />
+          </>
+        )}
       </div>
     </div>
   )
