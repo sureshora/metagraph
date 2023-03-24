@@ -102,7 +102,7 @@ export function TotalSupply({
             <span
               className={`ml-1 w-full leading-[.9rem] font-label font-light ${textColor} text-right`}
             >
-              {isGlobalSnapshot ? 'DAG' : 'L0 Currency'}
+              {isGlobalSnapshot ? 'DAG' : 'Currency L0'}
             </span>
           </div>
         </div>

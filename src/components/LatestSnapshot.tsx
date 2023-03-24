@@ -24,59 +24,7 @@ export function LatestSnapshot({
     value: {},
   } as SnapshotInfo)
 
-  const storeSnapshot = (response: SnapshotInfo) => {
-    const storedHashes = localStorage.getItem(clusterName)
-    if (!storedHashes || Object.keys(JSON.parse(storedHashes)).length === 0) {
-      localStorage.setItem(`${clusterName}`, JSON.stringify([response]))
-    } else {
-      const storedHashesParsed: SnapshotInfo[] = JSON.parse(storedHashes)
-
-      const shouldClearLocalStorage = storedHashesParsed.some(
-        (storedSnapshot) =>
-          storedSnapshot.value.ordinal > response.value.ordinal,
-      )
-
-      if (shouldClearLocalStorage) {
-        localStorage.removeItem(clusterName)
-        localStorage.setItem(`${clusterName}`, JSON.stringify([response]))
-        return
-      }
-
-      if (storedHashesParsed.length >= 100) {
-        storedHashesParsed.shift()
-      }
-
-      const ordinalAlreadyFilled = storedHashesParsed.some(
-        (storedSnapshot) =>
-          storedSnapshot.value.ordinal === response.value.ordinal,
-      )
-      if (ordinalAlreadyFilled) {
-        return
-      }
-
-      storedHashesParsed.push(response)
-      localStorage.setItem(`${clusterName}`, JSON.stringify(storedHashesParsed))
-    }
-  }
-
-  const checkLastSnapshot = (response: SnapshotInfo) => {
-    if (Object.keys(response.value).length === 0) {
-      setSeconds(0)
-      setLastSnapshotInfo(response)
-      return
-    }
-    if (
-      lastSnapshotInfo &&
-      lastSnapshotInfo.value.ordinal === response.value.ordinal
-    ) {
-      setSeconds(seconds + 1)
-    } else {
-      setLastSnapshotInfo(response)
-      setSeconds(0)
-    }
-  }
-
-  const fetchData = async () => {
+  const fetchLatestSnapshot = async () => {
     const url = isGlobalSnapshot
       ? `${apiUrl}/global-snapshots/latest`
       : `${apiUrl}/snapshots/latest`
@@ -98,8 +46,120 @@ export function LatestSnapshot({
     checkLastSnapshot(response)
   }
 
+  const fetchSnapshotByOrdinal = async (
+    ordinal: number,
+  ): Promise<SnapshotInfo> => {
+    const url = isGlobalSnapshot
+      ? `${apiUrl}/global-snapshots/${ordinal}`
+      : `${apiUrl}/snapshots/${ordinal}`
+
+    const snapshotsResponse = await fetch(url, {
+      headers: {
+        Accept: 'application/json',
+      },
+      cache: 'no-store',
+      next: {
+        revalidate: 5,
+      },
+    })
+    const response: SnapshotInfo = await snapshotsResponse.json()
+
+    return response
+  }
+
+  const getSnapshotsBetweenOrdinals = async (
+    initialOrdinal: number,
+    finalOrdinal: number,
+  ): Promise<SnapshotInfo[]> => {
+    const snapshotsInfosPromises: Promise<SnapshotInfo>[] = []
+    for (let idx = initialOrdinal; idx <= finalOrdinal; idx++) {
+      snapshotsInfosPromises.push(fetchSnapshotByOrdinal(idx))
+    }
+
+    const snapshotsInfos = await Promise.all(snapshotsInfosPromises)
+    return snapshotsInfos
+  }
+
+  const storeSnapshot = async (response: SnapshotInfo) => {
+    const lastKnowSnapshotKey = `${clusterName}_last_ordinal`
+    const storedSnapshots = localStorage.getItem(clusterName)
+    const lastKnowSnapshot = localStorage.getItem(lastKnowSnapshotKey)
+
+    if (!lastKnowSnapshot || !storedSnapshots) {
+      const initialOrdinal =
+        response.value.ordinal - 100 > 0 ? response.value.ordinal - 100 : 1
+      const finalOrdinal = response.value.ordinal
+
+      const snapshotsList = await getSnapshotsBetweenOrdinals(
+        initialOrdinal,
+        finalOrdinal,
+      )
+
+      localStorage.setItem(clusterName, JSON.stringify(snapshotsList))
+      localStorage.setItem(lastKnowSnapshotKey, finalOrdinal.toString())
+      return
+    }
+
+    if (Number(lastKnowSnapshot) === response.value.ordinal) {
+      return
+    }
+
+    const storedSnapshotsParsed: SnapshotInfo[] = JSON.parse(storedSnapshots)
+
+    const snapshotsList = await getSnapshotsBetweenOrdinals(
+      Number(lastKnowSnapshot),
+      response.value.ordinal,
+    )
+
+    const shouldClearLocalStorage = storedSnapshotsParsed.some(
+      (storedSnapshot) => storedSnapshot.value.ordinal > response.value.ordinal,
+    )
+
+    if (shouldClearLocalStorage) {
+      localStorage.removeItem(clusterName)
+      localStorage.setItem(`${clusterName}`, JSON.stringify(snapshotsList))
+      return
+    }
+
+    if (storedSnapshotsParsed.length >= 100) {
+      storedSnapshotsParsed.shift()
+    }
+
+    const storedSnapshotOrdinals = storedSnapshotsParsed.map(
+      (snapshot) => snapshot.value.ordinal,
+    )
+
+    const snapshotListParsed = snapshotsList.filter(
+      (snapshot) => !storedSnapshotOrdinals.includes(snapshot.value.ordinal),
+    )
+
+    storedSnapshotsParsed.push(...snapshotListParsed)
+    localStorage.setItem(
+      `${clusterName}`,
+      JSON.stringify(storedSnapshotsParsed),
+    )
+    localStorage.setItem(lastKnowSnapshotKey, response.value.ordinal.toString())
+  }
+
+  const checkLastSnapshot = (response: SnapshotInfo) => {
+    if (Object.keys(response.value).length === 0) {
+      setSeconds(0)
+      setLastSnapshotInfo(response)
+      return
+    }
+    if (
+      lastSnapshotInfo &&
+      lastSnapshotInfo.value.ordinal === response.value.ordinal
+    ) {
+      setSeconds(seconds + 1)
+    } else {
+      setLastSnapshotInfo(response)
+      setSeconds(0)
+    }
+  }
+
   useEffect(() => {
-    fetchData()
+    fetchLatestSnapshot()
   }, [])
 
   useEffect(() => {
@@ -107,7 +167,7 @@ export function LatestSnapshot({
       if (seconds === 0 || seconds % REFRESH_TIME !== 0) {
         setSeconds(seconds + 1)
       } else {
-        fetchData()
+        fetchLatestSnapshot()
       }
     }, 1000)
   }, [seconds])

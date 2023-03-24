@@ -23,61 +23,65 @@ export default async function Home() {
     )
   }
 
+  const GLOBAL_L0_CLUSTER_NAME = 'Global L0'
+  const CURRENCY_L0_CLUSTER_NAME = 'Currency L0'
+  const CURRENCY_L1_CLUSTER_NAME = 'Currency L1'
+
   return (
     <div className="w-full h-full px-6 pb-4 bg-background-light dark:bg-background-dark">
       <section className="mt-6 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
         <ClusterMetrics
           apiUrl={process.env.L0_GLOBAL_URL}
-          clusterName="L0 Global"
+          clusterName={GLOBAL_L0_CLUSTER_NAME}
         />
         <ClusterMetrics
           apiUrl={process.env.L0_CURRENCY_URL}
-          clusterName="L0 Currency"
+          clusterName={CURRENCY_L0_CLUSTER_NAME}
         />
         <ClusterMetrics
           apiUrl={process.env.L1_CURRENCY_URL}
-          clusterName="L1 Currency"
+          clusterName={CURRENCY_L1_CLUSTER_NAME}
         />
       </section>
 
       <section className="mt-2 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-4">
         <LatestSnapshot
           apiUrl={process.env.L0_GLOBAL_URL}
-          clusterName="L0 Global"
+          clusterName={GLOBAL_L0_CLUSTER_NAME}
           isGlobalSnapshot
         />
         <TotalSupply
           apiUrl={process.env.L0_GLOBAL_URL}
-          clusterName="L0 Global"
+          clusterName={GLOBAL_L0_CLUSTER_NAME}
           isGlobalSnapshot
         />
 
         <LatestSnapshot
           apiUrl={process.env.L0_CURRENCY_URL}
-          clusterName="L0 Currency"
+          clusterName={CURRENCY_L0_CLUSTER_NAME}
         />
         <TotalSupply
           apiUrl={process.env.L0_CURRENCY_URL}
-          clusterName="L0 Currency"
+          clusterName={CURRENCY_L0_CLUSTER_NAME}
         />
       </section>
 
       <section className="my-2 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-2">
-        <Snapshots clusterName="L0 Global" isGlobalSnapshot />
+        <Snapshots clusterName={GLOBAL_L0_CLUSTER_NAME} isGlobalSnapshot />
 
-        <Snapshots clusterName="L0 Currency" />
+        <Snapshots clusterName={CURRENCY_L0_CLUSTER_NAME} />
       </section>
 
       <section className="my-2 grid w-full grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-2">
         <WalletBalance
           apiUrl={process.env.L0_GLOBAL_URL}
-          clusterName="L0 Global"
+          clusterName={GLOBAL_L0_CLUSTER_NAME}
           isGlobalSnapshot
         />
 
         <WalletBalance
           apiUrl={process.env.L0_CURRENCY_URL}
-          clusterName="L0 Currency"
+          clusterName={CURRENCY_L0_CLUSTER_NAME}
         />
       </section>
     </div>
