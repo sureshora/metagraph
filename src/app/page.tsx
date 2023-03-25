@@ -87,6 +87,9 @@ export default async function Home() {
       </section>
 
       <section className="my-2 grid w-full grid-cols-1">
+        <Transactions clusterName={GLOBAL_L0_CLUSTER_NAME} isGlobalSnapshot />
+      </section>
+      <section className="my-2 grid w-full grid-cols-1">
         <Transactions clusterName={CURRENCY_L0_CLUSTER_NAME} />
       </section>
     </div>

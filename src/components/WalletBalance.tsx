@@ -34,6 +34,10 @@ export function WalletBalance({
       )
       const snapshotInfoToBeUsed = storedSnapshotsParsed[0]
 
+      if (!snapshotInfoToBeUsed) {
+        return
+      }
+
       snapshotInfoToBeUsed.value.info.balances = Object.fromEntries(
         Object.entries(snapshotInfoToBeUsed.value.info.balances).filter(
           ([key]) =>

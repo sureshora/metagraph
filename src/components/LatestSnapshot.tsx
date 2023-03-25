@@ -25,41 +25,44 @@ export function LatestSnapshot({
     value: {},
   } as SnapshotInfo)
 
-  const fillSnapshotTransactions = (snapshot: SnapshotInfo) => {
-    const blocks = snapshot.value.blocks
-
-    if (!blocks || blocks.length === 0) {
-      return
-    }
+  const fillSnapshotsTransactions = (snapshots: SnapshotInfo[]) => {
     const allTransactionsInfos: TransactionsInfo[] = []
-    for (const currentBlock of blocks) {
-      if (
-        !currentBlock ||
-        Object.keys(currentBlock).length === 0 ||
-        !currentBlock.block.value ||
-        Object.keys(currentBlock.block.value).length === 0
-      ) {
+    for (const snapshot of snapshots) {
+      const blocks = snapshot.value.blocks
+
+      if (!blocks || blocks.length === 0) {
         continue
       }
 
-      const transactions = currentBlock.block.value.transactions
-      if (!transactions || transactions.length === 0) {
-        continue
+      for (const currentBlock of blocks) {
+        if (
+          !currentBlock ||
+          Object.keys(currentBlock).length === 0 ||
+          !currentBlock.block.value ||
+          Object.keys(currentBlock.block.value).length === 0
+        ) {
+          continue
+        }
+
+        const transactions = currentBlock.block.value.transactions
+        if (!transactions || transactions.length === 0) {
+          continue
+        }
+
+        const transactionInfos = transactions.map(
+          (transaction): TransactionsInfo => {
+            return {
+              source: transaction.value.source,
+              destination: transaction.value.destination,
+              fee: transaction.value.fee,
+              amount: transaction.value.amount,
+              ordinal: snapshot.value.ordinal,
+            }
+          },
+        )
+
+        allTransactionsInfos.push(...transactionInfos)
       }
-
-      const transactionInfos = transactions.map(
-        (transaction): TransactionsInfo => {
-          return {
-            source: transaction.value.source,
-            destination: transaction.value.destination,
-            fee: transaction.value.fee,
-            amount: transaction.value.amount,
-            ordinal: snapshot.value.ordinal,
-          }
-        },
-      )
-
-      allTransactionsInfos.push(...transactionInfos)
     }
 
     const transactionsKey = `${clusterName}_transactions`
@@ -122,8 +125,6 @@ export function LatestSnapshot({
     })
     const response: SnapshotInfo = await snapshotsResponse.json()
 
-    fillSnapshotTransactions(response)
-
     return response
   }
 
@@ -142,6 +143,8 @@ export function LatestSnapshot({
 
   const storeSnapshot = async (response: SnapshotInfo) => {
     const lastKnowSnapshotKey = `${clusterName}_last_ordinal`
+    const transactionsKey = `${clusterName}_transactions`
+
     const storedSnapshots = localStorage.getItem(clusterName)
     const lastKnowSnapshot = localStorage.getItem(lastKnowSnapshotKey)
 
@@ -155,6 +158,7 @@ export function LatestSnapshot({
         finalOrdinal,
       )
 
+      fillSnapshotsTransactions(snapshotsList)
       localStorage.setItem(clusterName, JSON.stringify(snapshotsList))
       localStorage.setItem(lastKnowSnapshotKey, finalOrdinal.toString())
       return
@@ -177,7 +181,15 @@ export function LatestSnapshot({
 
     if (shouldClearLocalStorage) {
       localStorage.removeItem(clusterName)
+      localStorage.removeItem(transactionsKey)
+
+      fillSnapshotsTransactions(snapshotsList)
       localStorage.setItem(`${clusterName}`, JSON.stringify(snapshotsList))
+      localStorage.setItem(
+        lastKnowSnapshotKey,
+        response.value.ordinal.toString(),
+      )
+
       return
     }
 
@@ -194,6 +206,8 @@ export function LatestSnapshot({
     )
 
     storedSnapshotsParsed.push(...snapshotListParsed)
+
+    fillSnapshotsTransactions(snapshotsList)
     localStorage.setItem(
       `${clusterName}`,
       JSON.stringify(storedSnapshotsParsed),
