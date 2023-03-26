@@ -17,6 +17,8 @@ export function LatestSnapshot({
   apiUrl,
   isGlobalSnapshot,
 }: LatestSnapshotProps) {
+  const MAX_ITEMS_ON_LOCAL_STORAGE = 100
+
   const [seconds, setSeconds] = useState(0)
   const [snapshotInfo, setSnapshotInfo] = useState({
     value: {},
@@ -150,7 +152,9 @@ export function LatestSnapshot({
 
     if (!lastKnowSnapshot || !storedSnapshots) {
       const initialOrdinal =
-        response.value.ordinal - 100 > 0 ? response.value.ordinal - 100 : 1
+        response.value.ordinal - MAX_ITEMS_ON_LOCAL_STORAGE > 0
+          ? response.value.ordinal - MAX_ITEMS_ON_LOCAL_STORAGE
+          : 1
       const finalOrdinal = response.value.ordinal
 
       const snapshotsList = await getSnapshotsBetweenOrdinals(
@@ -170,8 +174,15 @@ export function LatestSnapshot({
 
     const storedSnapshotsParsed: SnapshotInfo[] = JSON.parse(storedSnapshots)
 
+    const lastKnowSnapshotAsNumber = Number(lastKnowSnapshot)
+    const initialOrdinal =
+      response.value.ordinal - lastKnowSnapshotAsNumber >
+      MAX_ITEMS_ON_LOCAL_STORAGE
+        ? response.value.ordinal - MAX_ITEMS_ON_LOCAL_STORAGE
+        : response.value.ordinal - lastKnowSnapshotAsNumber
+
     const snapshotsList = await getSnapshotsBetweenOrdinals(
-      Number(lastKnowSnapshot),
+      initialOrdinal,
       response.value.ordinal,
     )
 
@@ -193,7 +204,7 @@ export function LatestSnapshot({
       return
     }
 
-    if (storedSnapshotsParsed.length >= 100) {
+    if (storedSnapshotsParsed.length >= MAX_ITEMS_ON_LOCAL_STORAGE) {
       storedSnapshotsParsed.shift()
     }
 
