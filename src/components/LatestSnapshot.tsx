@@ -179,7 +179,9 @@ export function LatestSnapshot({
       response.value.ordinal - lastKnowSnapshotAsNumber >
       MAX_ITEMS_ON_LOCAL_STORAGE
         ? response.value.ordinal - MAX_ITEMS_ON_LOCAL_STORAGE
-        : response.value.ordinal - lastKnowSnapshotAsNumber
+        : response.value.ordinal - lastKnowSnapshotAsNumber > 0
+        ? lastKnowSnapshotAsNumber
+        : 1
 
     const snapshotsList = await getSnapshotsBetweenOrdinals(
       initialOrdinal,

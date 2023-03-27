@@ -6,10 +6,13 @@
     "dev": "next dev -p 8080",
     "build": "next build",
     "start": "next start -p 8080",
-    "lint": "next lint"
+    "lint": "next lint",
+    "transaction:send": "node send_transactions.js",
+    "transaction:send-bulk": "node send_transactions.js bulk"
   },
   "dependencies": {
     "@next/font": "^13.2.4",
+    "@stardust-collective/dag4": "^2.1.0-beta",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",

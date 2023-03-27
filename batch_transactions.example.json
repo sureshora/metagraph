@@ -1,0 +1,7 @@
+{
+  "seed": "seed",
+  "transactions": [
+    {"destination": "address","amount":10, "fee":0},
+    {"destination": "address","amount":5, "fee":0}
+  ]
+}
