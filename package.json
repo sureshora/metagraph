@@ -2,17 +2,20 @@
   "name": "currency-front-end",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev -p 8080",
     "build": "next build",
     "start": "next start -p 8080",
     "lint": "next lint",
-    "transaction:send": "node send_transactions.js",
-    "transaction:send-bulk": "node send_transactions.js bulk"
+    "metagraph-transaction:send": "ts-node --esm scripts/send_transactions/index.ts",
+    "metagraph-transaction:send-bulk": "ts-node --esm scripts/send_transactions/index.ts bulk",
+    "dag-transaction:send": "ts-node --esm scripts/send_transactions/index.ts dag",
+    "dag-transaction:send-bulk": "ts-node --esm scripts/send_transactions/index.ts bulk dag"
   },
   "dependencies": {
     "@next/font": "^13.2.4",
-    "@stardust-collective/dag4": "^2.1.0-beta",
+    "@stardust-collective/dag4": "^2.1.1-beta",
     "@types/node": "18.14.6",
     "@types/react": "18.0.28",
     "@types/react-dom": "18.0.11",
@@ -28,6 +31,7 @@
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/memory-cache": "^0.2.2",
     "autoprefixer": "^10.4.13",
+    "dotenv": "^16.0.3",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.7"
   }
