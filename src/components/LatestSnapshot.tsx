@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { SnapshotInfo, TransactionsInfo } from '@/types'
+import { BalancesInfo, SnapshotInfo, TransactionsInfo } from '@/types'
 import { Loading } from './Loading'
 
 type LatestSnapshotProps = {
@@ -88,9 +88,11 @@ export function LatestSnapshot({
   }
 
   const fetchLatestSnapshot = async () => {
+    const latestSnapshotBalanceKey = `${clusterName}_lastest_snapshot_balance`
+
     const url = isGlobalSnapshot
-      ? `${apiUrl}/global-snapshots/latest`
-      : `${apiUrl}/snapshots/latest`
+      ? `${apiUrl}/global-snapshots/latest/combined`
+      : `${apiUrl}/snapshots/latest/combined`
 
     const snapshotsResponse = await fetch(url, {
       headers: {
@@ -101,12 +103,17 @@ export function LatestSnapshot({
         revalidate: 5,
       },
     })
-    const response: SnapshotInfo = await snapshotsResponse.json()
-    setSnapshotInfo(response)
+    const [infos, balance]: [SnapshotInfo, BalancesInfo] =
+      await snapshotsResponse.json()
+
+    setSnapshotInfo(infos)
+
+    localStorage.setItem(latestSnapshotBalanceKey, JSON.stringify(balance))
+
     if (typeof window !== 'undefined') {
-      storeSnapshot(response)
+      storeSnapshot(infos)
     }
-    checkLastSnapshot(response)
+    checkLastSnapshot(infos)
   }
 
   const fetchSnapshotByOrdinal = async (

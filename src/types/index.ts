@@ -43,3 +43,7 @@ export type SnapshotInfoWithRawJSON = {
     }
   }
 }
+
+export type BalancesInfo = {
+  balances: WalletBalanceInfo
+}

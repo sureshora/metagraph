@@ -1,5 +1,5 @@
 'use client'
-import { SnapshotInfo } from '@/types'
+import { BalancesInfo } from '@/types'
 import { useEffect, useState } from 'react'
 import { Loading } from './Loading'
 
@@ -14,39 +14,21 @@ export function WalletBalance({
   apiUrl,
   isGlobalSnapshot,
 }: WalletBalanceProps) {
-  const [snapshotInfo, setSnapshotInfo] = useState({
-    value: { info: {} },
-  } as SnapshotInfo)
+  const [balances, setBalances] = useState({
+    balances: {},
+  } as BalancesInfo)
   const [seconds, setSeconds] = useState(0)
 
   const refreshBalances = () => {
     if (typeof window === 'undefined') {
       return
     }
+    const latestSnapshotBalanceKey = `${clusterName}_lastest_snapshot_balance`
+    const latestSnapshotBalance = localStorage.getItem(latestSnapshotBalanceKey)
 
-    const storedSnapshots = localStorage.getItem(clusterName)
-    if (storedSnapshots && storedSnapshots !== '{}') {
-      const rawStoredSnapshots: SnapshotInfo[] = JSON.parse(storedSnapshots)
-      const storedSnapshotsParsed = rawStoredSnapshots.sort(
-        (a: SnapshotInfo, b: SnapshotInfo) => {
-          return b.value.ordinal < a.value.ordinal ? -1 : 1
-        },
-      )
-      const snapshotInfoToBeUsed = storedSnapshotsParsed[0]
-
-      if (!snapshotInfoToBeUsed) {
-        return
-      }
-
-      snapshotInfoToBeUsed.value.info.balances = Object.fromEntries(
-        Object.entries(snapshotInfoToBeUsed.value.info.balances).filter(
-          ([key]) =>
-            !key.includes(
-              'DAGSTARDUSTCOLLECTIVEHZOIPHXZUBFGNXWJETZVSPAPAHMLXS',
-            ),
-        ),
-      )
-      setSnapshotInfo(snapshotInfoToBeUsed)
+    if (latestSnapshotBalance && latestSnapshotBalance !== '{}') {
+      const currentBalances: BalancesInfo = JSON.parse(latestSnapshotBalance)
+      setBalances(currentBalances)
     }
 
     setSeconds(seconds > 10 ? 0 : seconds + 1)
@@ -107,8 +89,7 @@ export function WalletBalance({
         </div>
       </div>
       <div className="overflow-x-auto">
-        {snapshotInfo.value.info.balances &&
-        Object.keys(snapshotInfo.value.info.balances).length > 0 ? (
+        {balances && Object.keys(balances.balances).length > 0 ? (
           <table className="mb-6 w-full table-auto text-left border-0">
             <thead className="border-b border-black/30">
               <tr>
@@ -119,8 +100,8 @@ export function WalletBalance({
               </tr>
             </thead>
             <tbody>
-              {snapshotInfo.value.info.balances &&
-                Object.keys(snapshotInfo.value.info.balances).map((key) => (
+              {balances &&
+                Object.keys(balances.balances).map((key) => (
                   <tr key={key} className="tableRow">
                     <td
                       className={`dataRow flex align-center ${textColor} font-light`}
@@ -162,7 +143,7 @@ export function WalletBalance({
                     >
                       {new Intl.NumberFormat('en-US', {
                         maximumSignificantDigits: 10,
-                      }).format(snapshotInfo.value.info.balances[key] / 1e8)}
+                      }).format((balances.balances[key] as number) / 1e8)}
                     </td>
                   </tr>
                 ))}
