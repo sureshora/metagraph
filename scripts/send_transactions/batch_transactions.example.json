@@ -1,7 +1,7 @@
 {
-  "seed": "seed",
+  "seed": "drift doll absurd cost upon magic plate often actor decade obscure smooth",
   "transactions": [
-    {"destination": "address","amount":10, "fee":0},
-    {"destination": "address","amount":5, "fee":0}
+    {"destination": "DAG4o41NzhfX6DyYBTTXu6sJa6awm36abJpv89jB","amount":11, "fee":0},
+    {"destination": "DAG8pkb7EhCkT3yU87B2yPBunSCPnEdmX2Wv24sZ","amount":5, "fee":1}
   ]
 }
