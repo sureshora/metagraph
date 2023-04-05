@@ -88,7 +88,7 @@ export function WalletBalance({
           </div>
         </div>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[500px]">
         {balances && Object.keys(balances.balances).length > 0 ? (
           <table className="mb-6 w-full table-auto text-left border-0">
             <thead className="border-b border-black/30">
