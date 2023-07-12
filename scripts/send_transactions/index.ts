@@ -196,6 +196,8 @@ const handleSingleTransaction = async (
           id: networkOptions.metagraphId,
           l0Url: networkOptions.l0CurrencyUrl,
           l1Url: networkOptions.l1CurrencyUrl,
+          beUrl: '',
+          metagraphId: ''
         })
 
         await singleMetagraphTransaction(
@@ -240,6 +242,8 @@ const handleBatchTransactions = async (
           id: networkOptions.metagraphId,
           l0Url: networkOptions.l0CurrencyUrl,
           l1Url: networkOptions.l1CurrencyUrl,
+          beUrl: '',
+          metagraphId: ''
         })
 
         await batchMetagraphTransaction(
