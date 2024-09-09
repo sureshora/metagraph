@@ -1,12 +1,12 @@
-import { ReactNode } from 'react'
-import NextThemeProvider from '@/NextThemeProvider'
-import Header from '@/sections/Header'
+import { ReactNode } from 'react';
+import NextThemeProvider from '@/NextThemeProvider';
+import Header from '@/sections/Header';
+import './globals.css';
 
-import './globals.css'
-// eslint-disable-next-line camelcase
-import { IBM_Plex_Mono } from 'next/font/google'
-import localFont from 'next/font/local'
+import { IBM_Plex_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 
+// Local font (Helvetica)
 const helveticaDisplay = localFont({
   src: [
     {
@@ -22,7 +22,7 @@ const helveticaDisplay = localFont({
   ],
   display: 'swap',
   variable: '--font-helveticaDisplay',
-})
+});
 
 const helveticaMicro = localFont({
   src: [
@@ -44,30 +44,31 @@ const helveticaMicro = localFont({
   ],
   display: 'swap',
   variable: '--font-helveticaMicro',
-})
+});
 
-const ibm = IBM_Plex_Mono({
-  variable: '--font-ibm-mono',
-  style: 'normal',
+// Google Font (IBM Plex Mono)
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['300', '400', '500'], // Ensure the needed weights are listed
   subsets: ['latin'],
   display: 'swap',
-  weight: ['300', '400', '500'],
-})
+  variable: '--font-ibmPlexMono', // Update the variable name to be consistent
+});
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="en"
-      className={`${ibm.variable} ${helveticaDisplay.variable} ${helveticaMicro.variable}`}
+      className={`${ibmPlexMono.variable} ${helveticaDisplay.variable} ${helveticaMicro.variable}`}
     >
-      <body className="lg:pl-117px lg:pr-33px pl-[10px] pr-[10px] bg-background-light dark:bg-background-dark">
+      <body className="font-sans lg:pl-117px lg:pr-33px pl-[10px] pr-[10px] bg-background-light dark:bg-background-dark">
         <NextThemeProvider>
           <Header />
-          <div className="flex content-center justify-center items-center">
+          <main className="flex content-center justify-center items-center">
             {children}
-          </div>
+          </main>
         </NextThemeProvider>
       </body>
     </html>
-  )
+  );
 }
+
